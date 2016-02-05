@@ -1,0 +1,6 @@
+#! /usr/local/bin/Rscript --no-save --no-environ --no-init-file --no-restore --default-packages=shiny,utils,methods,stats,grDevices,graphics
+
+args       <- commandArgs(trailingOnly = F)
+script.dir <- dirname(sub("--file=","",args[grep("--file",args)]))
+
+runApp(script.dir,launch.browser=TRUE)
