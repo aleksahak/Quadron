@@ -10,7 +10,7 @@ word_document: default
 
 <img src="QuadronGUI/Quadron_logo.png" align="middle" height="180" width="160" margin="0 auto" />
 
-The Quadron methodology, developed via gradient boosting machines trained on the experimental G4-seq data, is described and validated in detail at <http://dx.doi.org/ToBePublished>.
+The Quadron methodology, developed in the **Balasubramanian Laboratory** via gradient boosting machines trained on the experimental G4-seq data, is described and validated in detail at <http://dx.doi.org/ToBePublished>.
 
 ## Installation
 
