@@ -16,10 +16,15 @@
 ## passed object as such.                                                     ##
 ## If split = FALSE, the sequence will be read as one long string.            ##
 ################################################################################
-readfasta <- function(filename="filename.fasta", case="UPPER", fasta=NULL, split=TRUE){
+readfasta <- function(filename="filename.fasta", case="UPPER", fasta=NULL,
+                      split=TRUE, fastread=TRUE){
   
   if(is.null(fasta)){
-    fasta <- readLines(filename)
+    if(fastread==TRUE){
+      fasta <- data.table::fread(filename, sep="@", header=F)[[1L]]
+    } else {
+      fasta <- readLines(filename)
+    }
   } 
    
   parsed.fasta <- NULL

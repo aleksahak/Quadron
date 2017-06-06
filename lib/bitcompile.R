@@ -7,7 +7,7 @@ LibPath      = "."
 suppressWarnings(suppressPackageStartupMessages(library(compiler)))
 source(paste(LibPath,"/INFOline.R",sep=""))
 source(paste(LibPath,"/readfasta.R",sep=""))
-source(paste(LibPath,"/PQSL12Finder.R",sep=""))
+source(paste(LibPath,"/PatternFinder.R",sep=""))
 source(paste(LibPath,"/get_revcomp.R",sep=""))
 source(paste(LibPath,"/linesplit.R",sep=""))
 source(paste(LibPath,"/exclude_terminal_char.R",sep=""))
@@ -19,7 +19,7 @@ source(paste(LibPath,"/Quadron.R",sep=""))
 
 INFOline           <- cmpfun(INFOline,     options=list(suppressUndefined=TRUE))
 readfasta          <- cmpfun(readfasta,    options=list(suppressUndefined=TRUE))
-PQSL12Finder       <- cmpfun(PQSL12Finder, options=list(suppressUndefined=TRUE))
+PatternFinder      <- cmpfun(PatternFinder, options=list(suppressUndefined=TRUE))
 get.revcomp        <- cmpfun(get.revcomp,  options=list(suppressUndefined=TRUE))
 linesplit          <- cmpfun(linesplit,    options=list(suppressUndefined=TRUE))
 exclude.terminal.char <- cmpfun(exclude.terminal.char, options=list(suppressUndefined=TRUE))
@@ -83,7 +83,7 @@ file.remove(paste(LibPath,"/QuadronML",sep=""))
 
 save(list=c("INFOline",
             "readfasta",
-            "PQSL12Finder",
+            "PatternFinder",
             "get.revcomp",
             "linesplit",
             "exclude.terminal.char",

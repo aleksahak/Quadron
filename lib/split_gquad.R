@@ -7,12 +7,12 @@
 ## loops are just another repeat of Gs, "" will be returned in place of that. ##
 ## REQUIRES: exclude.terminal.char() in exclude_terminal_char.R file!!!       ##
 ################################################################################
-split.gquad <- function(seq="GGGGATGCATTTGGGAAAAAGGGGTGTTT"){
+split.gquad <- function(seq="GGGGATGCATTTGGGAAAAAGGGGTGTTT", spl="GGG"){
 
   if(!exists("exclude.terminal.char")){
     stop("split.gquad: failed dependency: load exclude.terminal.char().")
   }
-  splitseq <- unlist(strsplit(seq,"GGG"))
+  splitseq <- unlist(strsplit(seq, spl))
   splitseq <- splitseq[-which(splitseq=="")]
   if(length(splitseq)==0){
       return(c("","",""))

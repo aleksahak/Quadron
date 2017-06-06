@@ -8,5 +8,6 @@ load("Quadron.lib")
 
 Quadron(FastaFile= "test.fasta", 
         OutFile  = "out.txt",
-        nCPU     = 1)
+        nCPU     = 1,
+        NonCanonical = FALSE)
 ################################################################################

@@ -14,7 +14,7 @@ getSTART <- function(){
     "HEADER: L   - length of the retrieved PQS_L12 motif.",
     "HEADER: Q   - Quadron prediction of the corresponding G4-seq mismatch level",
     "HEADER:       for a polymerase stalling at quadruplex sites. NA indicates that",
-    "HEADER:       the PQS_L12 is to close to the sequence termini for the 50-nt",
+    "HEADER:       the PQS_L12 is too close to the sequence termini for the 50-nt",
     "HEADER:       flanks to be analysed, as required for Quadron predictions.",
     "HEADER: SEQUENCE - PQS_L12 sequence in the supplied + strand. If, for a ",
     "HEADER:       particular PQS_L12, str is +, then this is the PQS_L12 sequence",

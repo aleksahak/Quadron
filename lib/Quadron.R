@@ -8,7 +8,8 @@
 Quadron <- function(FastaFile    = "test.fasta",
                     OutFile      = "out.txt",
                     nCPU         = 4,
-                    parsed.seq   = ""){
+                    parsed.seq   = "",
+                    NonCanonical = FALSE){
 ################################################################################
 
   suppressWarnings(suppressPackageStartupMessages(library(doMC)))
@@ -26,7 +27,7 @@ Quadron <- function(FastaFile    = "test.fasta",
   info <- INFOline(OUT=info, msg=
   "NOTE: Parsing the sequence...")
   if(parsed.seq==""){
-    seq <- readfasta(filename=FastaFile, case="UPPER", split=FALSE)
+    seq <- readfasta(filename=FastaFile, case="UPPER", split=FALSE, fastread=TRUE)
   } else {
     seq <- NULL
     seq$seq <- paste(parsed.seq, collapse="")
@@ -38,10 +39,38 @@ Quadron <- function(FastaFile    = "test.fasta",
 
   info <- INFOline(OUT=info, msg=
   "NOTE: Scanning the sequence for G4 motifs with up to 12-nt loops...")
-  QP <- PQSL12Finder(seq=seq$seq)
+  if(NonCanonical==TRUE){
+    info <- INFOline(OUT=info, msg=
+    "NOTE: Relaxing the criteria out of the canonical G4 scope...")
+    psp <- "([G]{2,}[NATGCU]{1,12}){3,}[G]{2,}"
+    msp <- "([C]{2,}[NATGCU]{1,12}){3,}[C]{2,}"
+  } else {
+    psp <- "([G]{3}[NATGCU]{1,12}){3,}[G]{3}"
+    msp <- "([C]{3}[NATGCU]{1,12}){3,}[C]{3}"
+  }
+  
+  
+  
+  
+  QP <- PatternFinder(seq=seq$seq,
+                      plus.strand.pattern=psp,
+                      minus.strand.pattern=msp)
+  
+  
+  # will use only:
+  # QP$sequence
+  # QP$start.pos
+  # QP$seq.length
+  # QP$strand
+  
+  
+  
+  
 
   ##############################################################################
-  if(QP$num.occ!=0){ # hence there are PQSs found.
+  QP.num.occ <- length(QP$start.pos)
+  
+  if(QP.num.occ!=0){ # hence there are PQSs found.
 
   info <- INFOline(OUT=info, msg=
   paste("NOTE: Extracting features using ", nCPU, " processing core(s).", sep=""))
@@ -53,7 +82,7 @@ Quadron <- function(FastaFile    = "test.fasta",
 
   #RES=foreach(i = 1:pqs.len, .combine="rbind") %dopar% {
   #pqs.len=100  ### *** ### TEST LINE
-  RES <- foreach(ch=isplitVector(1:QP$num.occ, chunks=ceiling(QP$num.occ/1000)),
+  RES <- foreach(ch=isplitVector(1:QP.num.occ, chunks=ceiling(QP.num.occ/1000)),
                  .combine="rbind", .inorder=TRUE) %dopar% {
 
     count <- 1
@@ -64,7 +93,7 @@ Quadron <- function(FastaFile    = "test.fasta",
       #*# print(i, quote=F)
 
       # Getting the GENOMIC sequences for PQS and flanks. Note, that
-      # here 5' and 3' assignment will be correct for only + strand.
+      # here 5' and 3' assignment naming will be correct for only + strand.
       pqs.seq    <-  QP$sequence[i]
       flank5.seq <- substr( seq$seq,
                             start = (QP$start.pos[i]-50),
@@ -86,7 +115,11 @@ Quadron <- function(FastaFile    = "test.fasta",
         }
 
         # Extracting the required features.
-        dfr <- FeatureExtractorQr(seq=pqs.seq, type="PQS", O=TRUE, OT=TRUE, G4=TRUE)
+        if(NonCanonical==TRUE){
+          dfr <- FeatureExtractorQr(seq=pqs.seq, type="PQS", O=TRUE, OT=TRUE, G4=TRUE, NC=TRUE)
+        } else {
+          dfr <- FeatureExtractorQr(seq=pqs.seq, type="PQS", O=TRUE, OT=TRUE, G4=TRUE, NC=FALSE)
+        }
         dfr <- data.frame(dfr)
 
         df.f5 <- FeatureExtractorQr(seq=flank5.seq, type="FLANK5", O=TRUE, OT=TRUE, G4=FALSE)
@@ -109,23 +142,34 @@ Quadron <- function(FastaFile    = "test.fasta",
 
   }
   #### FOREACH EXECUTION DONE ####
+  
+    if(dim(RES)[1]==1 & all(is.na(RES[1,]))==TRUE){
+      info <- INFOline(OUT=info, msg=
+      "NOTE: There is only a single motif detected, with insufficient flanks.") 
+      info <- INFOline(OUT=info, msg=
+      "NOTE: Quadron core will not be executed.")
+      PRED <- NA
+    
+    } else {
 
-  info <- INFOline(OUT=info, msg=
-  "NOTE: Pre-processing the extracted features...")
-  # load("./ModelProc.env")
-  RES[,feature.names.for.df] <- t( (t(RES[,feature.names.for.df]) - medians[feature.names.for.df]) / sdevs[feature.names.for.df] )
+      info <- INFOline(OUT=info, msg=
+      "NOTE: Pre-processing the extracted features...")
+      # load("./ModelProc.env")
+      RES[,feature.names.for.df] <- t( (t(RES[,feature.names.for.df]) - medians[feature.names.for.df]) / sdevs[feature.names.for.df] )
 
-  #info <- INFOline(OUT=info, msg=
-  #"NOTE: Loading Quadron core...")
-  #load("./QuadronML")
-  suppressPackageStartupMessages(library(xgboost))
-  suppressPackageStartupMessages(library(plyr))
+      #info <- INFOline(OUT=info, msg=
+      #"NOTE: Loading Quadron core...")
+      #load("./QuadronML")
+      suppressPackageStartupMessages(library(xgboost))
+      suppressPackageStartupMessages(library(plyr))
 
-  info <- INFOline(OUT=info, msg=
-  "NOTE: Executing the Quadron core...")
-  PRED <- rep(NA, QP$num.occ)
-  non.na.rows <- which(!is.na(RES[,1]))
-  PRED[non.na.rows] <- predict(QuadronML, newdata=RES[non.na.rows,])
+      info <- INFOline(OUT=info, msg=
+      "NOTE: Executing the Quadron core...")
+      PRED <- rep(NA, QP.num.occ)
+      non.na.rows <- which(!is.na(RES[,1]))
+      PRED[non.na.rows] <- predict(QuadronML, newdata=RES[non.na.rows,])
+ 
+    }
 
   } else { # no PQS is found
     PRED <- NA

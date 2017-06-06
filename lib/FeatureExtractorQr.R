@@ -10,18 +10,20 @@
 # G4 -- features that describe the engulfed quadruplex,                        #
 #       assuming that the whole sequence is a quadruplex                       #
 ################################################################################
+
 FeatureExtractorQr <- function(seq="GGGGTGGTGGGCCCGCGGGGCGCGGGGAAGCGGGGGAGGAGGGCAGGG",
                                O=TRUE, OT=TRUE, G4=TRUE,
-                               type="PQS" # "FLANK5", "FLANK3"
+                               type="PQS", # "FLANK5", "FLANK3"
+                               NC = FALSE
                               ){
 
   # O O O O O O O O O O O O O O O O O O O O O O O O O O O O O O O O O O O O O O O
   if(O==TRUE){
     seq.split <- strsplit(seq, split="")[[1]]
-    O.Length <- length(seq.split)            #--$
-    O.Gcont  <- sum(seq.split=="G")/O.Length #--$
-    O.Ccont  <- sum(seq.split=="C")/O.Length #--$
-    O.Acont  <- sum(seq.split=="A")/O.Length #--$
+    O.Length  <- length(seq.split)            #--$
+    O.Gcont   <- sum(seq.split=="G")/O.Length #--$
+    O.Ccont   <- sum(seq.split=="C")/O.Length #--$
+    O.Acont   <- sum(seq.split=="A")/O.Length #--$
   }
   # O O O O O O O O O O O O O O O O O O O O O O O O O O O O O O O O O O O O O O O
 
@@ -65,7 +67,11 @@ FeatureExtractorQr <- function(seq="GGGGTGGTGGGCCCGCGGGGCGCGGGGAAGCGGGGGAGGAGGGC
   # G4 G4 G4 G4 G4 G4 G4 G4 G4 G4 G4 G4 G4 G4 G4 G4 G4 G4 G4 G4 G4 G4 G4 G4 G4 G4
   if(G4==TRUE){
     # a vector where each entry is a string of a loop sequence
-    nonG3plus.loops     <- split.gquad(seq)
+    if(NC==TRUE){
+      nonG3plus.loops     <- split.gquad(seq, spl="GG") # that would be non G2 loops
+    } else {
+      nonG3plus.loops     <- split.gquad(seq, spl="GGG")
+    }
 
     #*#- # the loop merged and split vector of individual characters in loops
     #*#- nonG3plus.seq.split <- unlist(strsplit(nonG3plus.loops, split=""))
