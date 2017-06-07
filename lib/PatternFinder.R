@@ -8,58 +8,52 @@
 #       C, U.                                                                  #
 #                                                                              #
 ################################################################################
-PatternFinder <- function(seq=seq,
-                          plus.strand.pattern="([G]{3}[NATGCU]{1,12}){3,}[G]{3}",
-                          minus.strand.pattern="([C]{3}[NATGCU]{1,12}){3,}[C]{3}"){
+PatternFinder <- function(seq=seq, str.pattern="([C]{3}[NATGCU]{1,12}){3,}[C]{3}"){
 
-  plus.strand  <- gregexpr(text = seq, pattern = plus.strand.pattern)
-  minus.strand <- gregexpr(text = seq, pattern = minus.strand.pattern)
-
-  start.pos  <- c( as.vector(plus.strand[[1]]), as.vector(minus.strand[[1]]) )
-  seq.length <- c( attr(plus.strand[[1]], "match.length"), attr(minus.strand[[1]], "match.length") )
-  strand     <- c( rep("+",length(plus.strand[[1]])), rep("-",length(minus.strand[[1]])) )
-
-  # Checking whether there are 0 returns (-1 by gregexpr)
-  rm.ind <- which(start.pos==-1)
-  if(length(rm.ind)!=0){
-    start.pos  <- start.pos[-rm.ind]
-    seq.length <- seq.length[-rm.ind]
-    strand     <- strand[-rm.ind]
-  }
-
-  if(length(start.pos)!=0){ # there ARE detected occurrences
-
-    # sorting the results in the order of their start.pos:
-    new.order  <- order(start.pos)
-
-    start.pos  <- start.pos[new.order]
-    seq.length <- seq.length[new.order]
-    strand     <- strand[new.order]
-    #num.occ    <- length(start.pos)
-    #num.occ.plus  <- length(which(strand=="+"))
-    #num.occ.minus <- length(which(strand=="-"))
-    sequence  <- sapply(1:length(start.pos), FUN=function(i){
-                        substr(seq, start=start.pos[i], stop=(start.pos[i]+seq.length[i]-1) )
-                       }, simplify=TRUE, USE.NAMES=FALSE)
-
-  } else { # there are NO detected occurrences
-    start.pos     <- 0
-    seq.length    <- 0
-    strand        <- 0
-    #num.occ       <- 0
-    #num.occ.plus  <- 0
-    #num.occ.minus <- 0
-    sequence      <- 0
-  }
+  all.strands  <- gregexpr(text = seq, pattern = str.pattern)
 
   QP.RESULTS <- NULL
-  QP.RESULTS$start.pos     <- start.pos
-  QP.RESULTS$seq.length    <- seq.length
-  QP.RESULTS$strand        <- strand
-  QP.RESULTS$sequence      <- sequence
-  #QP.RESULTS$num.occ       <- num.occ
-  #QP.RESULTS$num.occ.plus  <- num.occ.plus
-  #QP.RESULTS$num.occ.minus <- num.occ.minus
+  QP.RESULTS$start.pos  <- as.vector(all.strands[[1]])
+  QP.RESULTS$seq.length <- attr(all.strands[[1]], "match.length")
+
+  # Checking whether there are 0 returns (-1 by gregexpr)
+  rm.ind <- which(QP.RESULTS$start.pos==-1)
+  if(length(rm.ind)!=0){
+    QP.RESULTS$start.pos  <- QP.RESULTS$start.pos[-rm.ind]
+    QP.RESULTS$seq.length <- QP.RESULTS$seq.length[-rm.ind]
+  }
+
+  if(length(QP.RESULTS$start.pos)!=0){ # there ARE detected occurrences
+
+    # sorting the results in the order of their start.pos:
+    new.order  <- order(QP.RESULTS$start.pos)
+    QP.RESULTS$start.pos  <- QP.RESULTS$start.pos[new.order]
+    QP.RESULTS$seq.length <- QP.RESULTS$seq.length[new.order]
+
+    QP.RESULTS$sequence  <- sapply(1:length(QP.RESULTS$start.pos),
+                                   FUN=function(i){
+                                     substr(
+                                       seq,
+                                       start=QP.RESULTS$start.pos[i],
+                       stop=(QP.RESULTS$start.pos[i]+QP.RESULTS$seq.length[i]-1)
+                                     )
+                                   }, simplify=TRUE, USE.NAMES=FALSE)
+
+    QP.RESULTS$strand <- sapply(QP.RESULTS$sequence,
+                                FUN=function(i){
+                                  if( substr(i, start=1, stop=1)=="G"){
+                                    return("+")
+                                  } else {
+                                    return("-")
+                                  }
+                                }, simplify=TRUE, USE.NAMES=FALSE)
+
+  } else { # there are NO detected occurrences
+    QP.RESULTS$start.pos     <- NULL
+    QP.RESULTS$seq.length    <- NULL
+    QP.RESULTS$strand        <- NULL
+    QP.RESULTS$sequence      <- NULL
+  }
 
   #return( QP.RESULTS )
   return( as.data.frame(QP.RESULTS, stringsAsFactors=FALSE) )

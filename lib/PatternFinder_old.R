@@ -1,17 +1,19 @@
 ################################################################################
 #//    Aleksandr B. Sahakyan (aleksahak [at] cantab.net), Cambridge 2016     \\#
 ################################################################################
-# This function takes a DNA sequence and looks for a PQS-L12 motifs.           #
+# This function takes a DNA sequence and looks for the requested motifs.       #
 #                                                                              #
 # seq - a string of characters. The merged sequence in capital letters should  #
 #       be provided, such as "ATGG...". The allowed characters are N, A, T, G, #
 #       C, U.                                                                  #
 #                                                                              #
 ################################################################################
-PQSL12Finder <- function(seq=seq){
+PatternFinder <- function(seq=seq,
+                          plus.strand.pattern="([G]{3}[NATGCU]{1,12}){3,}[G]{3}",
+                          minus.strand.pattern="([C]{3}[NATGCU]{1,12}){3,}[C]{3}"){
 
-  plus.strand  <- gregexpr(text=seq, pattern="([G]{3}[NATGCU]{1,12}){3,}[G]{3}")
-  minus.strand <- gregexpr(text=seq, pattern="([C]{3}[NATGCU]{1,12}){3,}[C]{3}")
+  plus.strand  <- gregexpr(text = seq, pattern = plus.strand.pattern)
+  minus.strand <- gregexpr(text = seq, pattern = minus.strand.pattern)
 
   start.pos  <- c( as.vector(plus.strand[[1]]), as.vector(minus.strand[[1]]) )
   seq.length <- c( attr(plus.strand[[1]], "match.length"), attr(minus.strand[[1]], "match.length") )
@@ -33,10 +35,10 @@ PQSL12Finder <- function(seq=seq){
     start.pos  <- start.pos[new.order]
     seq.length <- seq.length[new.order]
     strand     <- strand[new.order]
-    num.occ    <- length(start.pos)
-    num.occ.plus  <- length(which(strand=="+"))
-    num.occ.minus <- length(which(strand=="-"))
-    sequence  <- sapply(1:num.occ, FUN=function(i){
+    #num.occ    <- length(start.pos)
+    #num.occ.plus  <- length(which(strand=="+"))
+    #num.occ.minus <- length(which(strand=="-"))
+    sequence  <- sapply(1:length(start.pos), FUN=function(i){
                         substr(seq, start=start.pos[i], stop=(start.pos[i]+seq.length[i]-1) )
                        }, simplify=TRUE, USE.NAMES=FALSE)
 
@@ -44,9 +46,9 @@ PQSL12Finder <- function(seq=seq){
     start.pos     <- 0
     seq.length    <- 0
     strand        <- 0
-    num.occ       <- 0
-    num.occ.plus  <- 0
-    num.occ.minus <- 0
+    #num.occ       <- 0
+    #num.occ.plus  <- 0
+    #num.occ.minus <- 0
     sequence      <- 0
   }
 
@@ -55,11 +57,12 @@ PQSL12Finder <- function(seq=seq){
   QP.RESULTS$seq.length    <- seq.length
   QP.RESULTS$strand        <- strand
   QP.RESULTS$sequence      <- sequence
-  QP.RESULTS$num.occ       <- num.occ
-  QP.RESULTS$num.occ.plus  <- num.occ.plus
-  QP.RESULTS$num.occ.minus <- num.occ.minus
+  #QP.RESULTS$num.occ       <- num.occ
+  #QP.RESULTS$num.occ.plus  <- num.occ.plus
+  #QP.RESULTS$num.occ.minus <- num.occ.minus
 
-  return(QP.RESULTS)
+  #return( QP.RESULTS )
+  return( as.data.frame(QP.RESULTS, stringsAsFactors=FALSE) )
 
 }
 ## FUNCTION ####################################################################

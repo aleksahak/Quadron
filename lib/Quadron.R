@@ -9,8 +9,14 @@ Quadron <- function(FastaFile    = "test.fasta",
                     OutFile      = "out.txt",
                     nCPU         = 4,
                     parsed.seq   = "",
-                    NonCanonical = FALSE){
+                    NonCanonical = FALSE,
+                    SeqPartitionBy = 1000000,
+                    ReturnOnlyNC = FALSE){
 ################################################################################
+
+  if(ReturnOnlyNC==TRUE & NonCanonical==FALSE){
+    stop("Quadron: ReturnOnlyNC can be activated if NonCanonical is TRUE.")
+  }
 
   suppressWarnings(suppressPackageStartupMessages(library(doMC)))
   suppressWarnings(suppressPackageStartupMessages(library(foreach)))
@@ -18,7 +24,7 @@ Quadron <- function(FastaFile    = "test.fasta",
   registerDoMC(cores = nCPU)
 
   info <- INFOline(OUT=info, msg=
-  "NOTE: *:)* Sequence-Based Prediction of DNA Quadruplex Structures in Genomes *(:*",
+  "NOTE: *:)* Sequence-Based Prediction of DNA Quadruplex Structures *(:*",
   initial=TRUE)
 
   info <- INFOline(OUT=info, msg=
@@ -38,38 +44,100 @@ Quadron <- function(FastaFile    = "test.fasta",
   paste("NOTE: The digested sequence is of ", seq$length, "-nt length.", sep=""))
 
   info <- INFOline(OUT=info, msg=
-  "NOTE: Scanning the sequence for G4 motifs with up to 12-nt loops...")
+  "NOTE: Scanning the sequence for G4 motifs...")
+
   if(NonCanonical==TRUE){
     info <- INFOline(OUT=info, msg=
     "NOTE: Relaxing the criteria out of the canonical G4 scope...")
-    psp <- "([G]{2,}[NATGCU]{1,12}){3,}[G]{2,}"
-    msp <- "([C]{2,}[NATGCU]{1,12}){3,}[C]{2,}"
+
+    #> source("http://bioconductor.org/biocLite.R")
+    #> biocLite("IRanges")
+    suppressPackageStartupMessages(library(IRanges))
+    #### FOREACH EXECUTION #########
+    QP <- foreach(j=isplitVector(1:seq$length, chunks=ceiling(seq$length/SeqPartitionBy)),
+                  .combine="rbind", .inorder=TRUE) %dopar% {
+            rng <- range(j)
+            # Adding 15nt tolerance range for retrieving complete G4s from split parts:
+            tol.rng <- c( max(1,(rng[1]-15)), min((rng[2]+15),seq$length) )
+
+            qp <- PatternFinder(seq=substr(seq$seq, start=tol.rng[1], stop=tol.rng[2]),
+               str.pattern="(([G]{3}[NATGCU]{1,12}){3,}[G]{3})|(([C]{3}[NATGCU]{1,12}){3,}[C]{3})")
+
+            qp.nc <- PatternFinder(seq=substr(seq$seq, start=tol.rng[1], stop=tol.rng[2]),
+               str.pattern="(([G]{2,}[NATGCU]{1,12}){3,}[G]{2,})|(([C]{2,}[NATGCU]{1,12}){3,}[C]{2,})")
+
+            # Identifying overlaps between QP.nc and QP ************************
+            if(length(qp$start.pos)!=0){
+             if(length(qp.nc$start.pos)!=0){
+
+              query=RangedData( IRanges(start = qp.nc$start.pos,
+                                        end = qp.nc$start.pos+qp.nc$seq.length-1),
+                                space = qp.nc$strand,
+                                query.ind = 1:length(qp.nc$start.pos) )
+
+              subject=RangedData( IRanges(start = qp$start.pos,
+                                          end = qp$start.pos+qp$seq.length-1),
+                                  space = qp$strand,
+                                  subject.ind = 1:length(qp$start.pos) )
+
+              ol <- as.matrix(findOverlaps(query=query, subject=subject, type="any",
+                                           maxgap=0L, minoverlap=1L, select="all"))
+
+              ol <- cbind(query=query[ol[,"queryHits"], ]$query.ind,
+                          subject=subject[ol[,"subjectHits"], ]$subject.ind)
+
+              if(!is.na(ol[,"query"][1])){ # there is at least one overlap
+                # eliminating rows in non-canonical qp.nc that overlap with qp
+                qp.nc <- qp.nc[-ol[,"query"],]
+              }
+
+              #----------------------
+              if(ReturnOnlyNC==TRUE){
+                qp <- qp.nc
+              } else {
+                # merging qp with qp.nc with reordering via genomic coordinates
+                qp <- rbind(qp, qp.nc)
+                reordering  <- order(qp$start.pos)
+                qp <- qp[reordering,]
+              }
+              #----------------------
+
+             }
+             # shifting the coordinate system as soon as at least qp is not NULL df
+             qp$start.pos <- qp$start.pos+tol.rng[1]-1
+            }
+            #*******************************************************************
+
+            return(qp)
+          }
+    #### FOREACH EXECUTION DONE ####
+
   } else {
-    psp <- "([G]{3}[NATGCU]{1,12}){3,}[G]{3}"
-    msp <- "([C]{3}[NATGCU]{1,12}){3,}[C]{3}"
+
+    #### FOREACH EXECUTION #########
+    QP <- foreach(j=isplitVector(1:seq$length, chunks=ceiling(seq$length/SeqPartitionBy)),
+                  .combine="rbind", .inorder=TRUE) %dopar% {
+            rng <- range(j)
+            # Adding 15nt tolerance range for retrieving complete G4s from split parts:
+            tol.rng <- c( max(1,(rng[1]-15)), min((rng[2]+15),seq$length) )
+            qp <- PatternFinder(seq=substr(seq$seq, start=tol.rng[1], stop=tol.rng[2]),
+            str.pattern="(([G]{3}[NATGCU]{1,12}){3,}[G]{3})|(([C]{3}[NATGCU]{1,12}){3,}[C]{3})")
+            qp$start.pos <- qp$start.pos+tol.rng[1]-1
+            return(qp)
+          }
+    #### FOREACH EXECUTION DONE ####
+
   }
-  
-  
-  
-  
-  QP <- PatternFinder(seq=seq$seq,
-                      plus.strand.pattern=psp,
-                      minus.strand.pattern=msp)
-  
-  
+
   # will use only:
   # QP$sequence
   # QP$start.pos
   # QP$seq.length
   # QP$strand
-  
-  
-  
-  
 
   ##############################################################################
   QP.num.occ <- length(QP$start.pos)
-  
+
   if(QP.num.occ!=0){ # hence there are PQSs found.
 
   info <- INFOline(OUT=info, msg=
@@ -142,14 +210,14 @@ Quadron <- function(FastaFile    = "test.fasta",
 
   }
   #### FOREACH EXECUTION DONE ####
-  
+
     if(dim(RES)[1]==1 & all(is.na(RES[1,]))==TRUE){
       info <- INFOline(OUT=info, msg=
-      "NOTE: There is only a single motif detected, with insufficient flanks.") 
+      "NOTE: There is only a single motif detected, with insufficient flanks.")
       info <- INFOline(OUT=info, msg=
       "NOTE: Quadron core will not be executed.")
       PRED <- NA
-    
+
     } else {
 
       info <- INFOline(OUT=info, msg=
@@ -168,14 +236,17 @@ Quadron <- function(FastaFile    = "test.fasta",
       PRED <- rep(NA, QP.num.occ)
       non.na.rows <- which(!is.na(RES[,1]))
       PRED[non.na.rows] <- predict(QuadronML, newdata=RES[non.na.rows,])
- 
+
     }
 
   } else { # no PQS is found
     PRED <- NA
+    QP$start.pos     <- NA
+    QP$seq.length    <- NA
+    QP$strand        <- NA
+    QP$sequence      <- NA
   }
   ##############################################################################
-
 
   info <- INFOline(OUT=info, msg=
   "NOTE: Formatting and saving the results...")
@@ -203,19 +274,3 @@ Quadron <- function(FastaFile    = "test.fasta",
 
 }
 ################################################################################
-
-  ## Formatting the output, ~1-mln-nt positions at a time.
-  ## Non-parallel execution (for the sake of safe disk writing).
-  #save.success <- foreach(pos=isplitVector(1:seq$length, chunks=ceiling(seq$length/1000000)),
-  #                        .combine="c", .inorder=TRUE) %do% {
-  #
-  #  mr        <- mutrate.par[ mrpar.ind[pos] ]
-  #  na.lines  <- which(is.na(mr))
-  #  na.bases  <- seq$seq[pos[na.lines]]
-  #  mr[na.lines] <- sapply(na.bases, FUN=get1merLine, simplify=TRUE, USE.NAMES=FALSE)
-  #  OUTPUT.CHUNK <- paste("DATA:", pos, mr, sep=" ")
-  #  write( OUTPUT.CHUNK, file=OutFile, append=TRUE )
-  #  return(1)
-  #
-  #}
-  ##
