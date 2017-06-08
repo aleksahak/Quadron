@@ -18,8 +18,8 @@ Quadron(FastaFile= "test.fasta",
         SeqPartitionBy = 1000000,
         ReturnOnlyNC = FALSE)
         
-file.remove("Quadron.lib")
-rm(list=ls())
+#file.remove("Quadron.lib")
+#rm(list=ls())
 ################################################################################
 
 

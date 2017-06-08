@@ -18,52 +18,47 @@
 ################################################################################
 readfasta <- function(filename="filename.fasta", case="UPPER", fasta=NULL,
                       split=TRUE, fastread=TRUE){
-  
+
   if(is.null(fasta)){
     if(fastread==TRUE){
       fasta <- data.table::fread(filename, sep="@", header=F)[[1L]]
     } else {
       fasta <- readLines(filename)
     }
-  } 
-   
+  }
+
   parsed.fasta <- NULL
 
   discard.ind <- grep(">", fasta, fixed=TRUE)
   if(length(discard.ind)==0){
     parsed.fasta$header <- NULL
-  } else { 
-    parsed.fasta$header <- fasta[discard.ind] 
+  } else {
+    parsed.fasta$header <- fasta[discard.ind]
   }
 
   discard.ind <- c(discard.ind, which(fasta==""|fasta==" "|fasta=="   "))
   if(length(discard.ind)!=0){
     fasta <- fasta[-discard.ind]
   }
-  
+
   parsed.fasta$seq <- NULL
   if(length(fasta)!=0){
-    if(case=="UPPER"){
-      if(split==TRUE){
-        parsed.fasta$seq <- toupper(unlist(strsplit(paste(fasta,collapse=""),"")))
-        parsed.fasta$length <- length(parsed.fasta$seq)
-      } else {
-        parsed.fasta$seq    <- toupper(paste(fasta,collapse=""))
-        parsed.fasta$length <- nchar(parsed.fasta$seq)
-      }
+    if(split==TRUE){
+      parsed.fasta$seq <- unlist(strsplit(paste(fasta,collapse=""),""))
+      parsed.fasta$length <- length(parsed.fasta$seq)
+    } else {
+      parsed.fasta$seq    <- paste(fasta,collapse="")
+      parsed.fasta$length <- nchar(parsed.fasta$seq)
     }
-    if(case=="LOWER"){
-      if(split==TRUE){
-        parsed.fasta$seq <- tolower(unlist(strsplit(paste(fasta,collapse=""),"")))
-        parsed.fasta$length <- length(parsed.fasta$seq)
-      } else {
-        parsed.fasta$seq    <- tolower(paste(fasta,collapse=""))
-        parsed.fasta$length <- nchar(parsed.fasta$seq)
-      }
+
+    if(case=="UPPER"){
+      parsed.fasta$seq <- toupper(parsed.fasta$seq)
+    } else if(case=="LOWER"){
+      parsed.fasta$seq <- tolower(parsed.fasta$seq)
     }
   }
-  
+
   return(parsed.fasta)
-  
+
 }
 ################################################################################
