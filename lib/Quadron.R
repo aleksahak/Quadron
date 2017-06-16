@@ -22,7 +22,18 @@ Quadron <- function(FastaFile    = "test.fasta",
   suppressWarnings(suppressPackageStartupMessages(library(foreach)))
   suppressWarnings(suppressPackageStartupMessages(library(itertools)))
   registerDoMC(cores = nCPU)
-
+  
+  if(packageDescription("xgboost")$Version!="0.4-4"){
+    stop("Quadron: our model is robust and reproducible with the\n       xgboost version 0.4-4. Install the specific version of xgboost\n       as described in the Quadron documentation.")
+    # install.packages(
+    #  "http://cran.r-project.org/src/contrib/Archive/xgboost/xgboost_0.4-4.tar.gz",
+    #  repos=NULL,
+    #  type="source"
+    # )
+    #
+    # https://support.rstudio.com/hc/en-us/articles/219949047-Installing-older-versions-of-packages
+  }
+  
   info <- INFOline(OUT=info, msg=
   "NOTE: *:)* Sequence-Based Prediction of DNA Quadruplex Structures *(:*",
   initial=TRUE)
