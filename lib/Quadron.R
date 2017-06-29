@@ -1,18 +1,28 @@
 ################################################################################
 #//    Aleksandr B. Sahakyan (aleksahak [at] cantab.net), Cambridge 2016     \\#
 ################################################################################
-# Requires the libraries "doMC", "foreach" and "itertools".                    #
+# Requires the libraries "doMC", "foreach", "itertools", "xgboost" (0.4-4),    #
+# "caret" and "plyr".                                                          #
 # If not already installed in R, you can install those by typing:              #
-# install.packages(c("doMC", "foreach" and "itertools"))                       #
+# install.packages(c("doMC", "foreach", "itertools", "plyr", "caret"))         #
+# Specific steps are needed to install the xgboost version 0.4-4, as detailed  #
+# in the Readme file.                                                          #
+# The default fastread==TRUE option in readfasta requires "data.table" library.#
 ################################################################################
 Quadron <- function(FastaFile    = "test.fasta",
                     OutFile      = "out.txt",
                     nCPU         = 4,
                     parsed.seq   = "",
-                    NonCanonical = FALSE,
-                    SeqPartitionBy = 1000000,
-                    ReturnOnlyNC = FALSE){
+                    SeqPartitionBy = 1000000){
 ################################################################################
+
+# These lines can become part of the accepted arguments, after the NC develop-
+# ment is done.
+ReturnOnlyNC = FALSE
+NonCanonical = FALSE
+# if NonCanonical==TRUE, will also require bioconductor package IRanges:
+#> source("http://bioconductor.org/biocLite.R")
+#> biocLite("IRanges")
 
   if(ReturnOnlyNC==TRUE & NonCanonical==FALSE){
     stop("Quadron: ReturnOnlyNC can be activated if NonCanonical is TRUE.")
@@ -61,8 +71,6 @@ Quadron <- function(FastaFile    = "test.fasta",
     info <- INFOline(OUT=info, msg=
     "NOTE: Relaxing the criteria out of the canonical G4 scope...")
 
-    #> source("http://bioconductor.org/biocLite.R")
-    #> biocLite("IRanges")
     suppressPackageStartupMessages(library(IRanges))
     #### FOREACH EXECUTION #########
     QP <- foreach(j=isplitVector(1:seq$length, chunks=ceiling(seq$length/SeqPartitionBy)),

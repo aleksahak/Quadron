@@ -6,7 +6,7 @@ html_document:
 word_document: default
 ---
 
-# Quadron: sequence-based predictor of genomic DNA quadruplex formation propensity
+# Quadron: predictor of sequence-driven genomic DNA quadruplex formation propensity
 
 <img src="QuadronGUI/Quadron_logo.png" align="middle" height="180" width="160" margin="0 auto" />
 
@@ -16,7 +16,7 @@ The Quadron methodology, developed via gradient boosting machines trained on the
 
 **1.** Install the latest version of R programming language or skip to the next step. Step-wise instructions on R installation and upgrade can be found through the following links: [1](http://alexonscience.blogspot.co.uk/2015/10/installing-r-on-linuxunix-machines-from.html), [2](http://alexonscience.blogspot.co.uk/2015/10/upgrade-r-environmentlibraries-mac-osx.html).
 
-**2.** Launch R from the command line and install the R packages, including *shiny* (required for the graphical user interface), *doMC*, *foreach* and *itertools* (required for a parallel execution of the program) from within R.
+**2.** Launch R from the command line and install the following R packages, including *shiny* (required for the graphical user interface), *doMC*, *foreach* and *itertools* (required for a parallel execution of the program) from within R.
 
 ```{bash, tidy=TRUE, echo=TRUE, eval=FALSE}
 $ R
@@ -24,12 +24,17 @@ $ R
 ```{r, tidy=TRUE, echo=TRUE, eval=FALSE}
 > install.packages("plyr")
 > install.packages("data.table")
-> install.packages("xgboost")
 > install.packages("caret")
 > install.packages("shiny")
 > install.packages("doMC")
 > install.packages("foreach")
 > install.packages("itertools")
+
+# Install the sepcific 0.4-4 version of xgboost.
+> install.packages(
+    "http://cran.r-project.org/src/contrib/Archive/xgboost/xgboost_0.4-4.tar.gz",
+    repos=NULL,
+    type="source")
 ```
 
 **3.** Download the Quadron source code from the [GitHub](https://github.com/aleksahak/Quadron) repository. You can also do that via a Linux/Unix/OSX command line, given that git is installed, by typing the following:
