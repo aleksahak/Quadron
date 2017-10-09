@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="169px" height="26px" viewBox="0 0 169 26" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <title>Slice 1</title>
+    <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
+    <defs></defs>
+    <g id="Page 1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
+        <path d="M124,13 L155,13" id="Line" stroke="#979797" stroke-width="4" fill="#979797"></path>
+        <path id="Line decoration-1" d="M155,13 C151.22,11.95 147.98,11.05 144.2,10 C144.2,12.1 144.2,13.9 144.2,16 C147.98,14.95 151.22,14.05 155,13 C155,13 155,13 155,13 Z M155,13" stroke="#979797" stroke-width="4" fill="#979797"></path>
+        <path d="M14,14 L45,14" id="Line" stroke="#979797" stroke-width="4" fill="#979797"></path>
+        <path id="Line decoration-1" d="M14.8,14 C18.58,12.95 21.82,12.05 25.6,11 C25.6,13.1 25.6,14.9 25.6,17 C21.82,15.95 18.58,15.05 14.8,14 C14.8,14 14.8,14 14.8,14 Z M14.8,14" stroke="#979797" stroke-width="4" fill="#979797"></path>
+        <path d="M85.0000008,24 L85.0000003,12.827496" id="Line" stroke="#979797" stroke-width="4" fill="#979797"></path>
+        <path id="Line decoration-1" d="M85.0000003,13.0000004 C83.9500005,16.7800003 83.0500006,20.0200002 82.0000008,23.8000001 C84.1000008,23.8 85.9000008,23.8 88.0000008,23.7999999 C86.9500006,20.0200001 86.0500005,16.7800002 85.0000003,13.0000004 C85.0000003,13.0000004 85.0000003,13.0000004 85.0000003,13.0000004 Z M85.0000003,13.0000004" stroke="#979797" stroke-width="4" fill="#979797"></path>
+    </g>
+</svg>

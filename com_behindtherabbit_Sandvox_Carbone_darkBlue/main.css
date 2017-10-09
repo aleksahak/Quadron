@@ -1,0 +1,487 @@
+@charset "UTF-8";
+
+/*
+   css Copyright © 2005-2012 Karelia Software. All rights reserved.
+   css released under Creative Commons License  - http://creativecommons.org/licenses/by-sa/2.5/
+   All associated graphics belong to their respective owners and are licensed separately.
+*/
+
+/* IE7 hacks */
+
+*:first-child+html .gridItem img {
+	position:relative;
+	top:0px;
+}
+
+*:first-child+html .gridItem h3 {
+	position:relative;
+	top:0px;
+}
+
+/* Navigation arrows */
+div.text-navigation { text-align:center; margin-bottom:1em;}
+div.text-navigation div { display:inline; margin:0px 0.5em; }
+.collection-navigation .disabled-navigation { text-indent:-5000px; }
+
+/* 2.0 wrap compatibility. 2.0-compatible designs can further adjust these if they need */
+.wide { display:block; }
+
+.narrow.left {   /* Some designs won't respect without !important */
+    float:left!important;
+    clear:left!important;
+}
+.narrow.right {
+    float:right!important;
+    clear:right!important;
+}
+
+.wide.left   .graphic, img.wide.left,   .wide.left video,   .wide.left audio   { display:block; margin-left:0px; margin-right:auto; }
+.wide.center .graphic, img.wide.center, .wide.center video, .wide.center audio { display:block; margin-left:auto; margin-right:auto; }
+.wide.right  .graphic, img.wide.right,  .wide.right video,  .wide.right audio  { display:block; margin-left:auto; margin-right:0px; }
+
+
+.ImageElement.left, .AudioElement.left { text-align:left; }
+.ImageElement.center, .AudioElement.center { text-align:center; }
+.ImageElement.right, .AudioElement.right { text-align:right; }
+
+/* Captions should align themselves with the graphic */
+.graphic-container.left .caption { text-align:left; }
+.graphic-container.center .caption { text-align:center; }
+.graphic-container.right .caption { text-align:right; }
+
+/* Inline iframes need to display as a block to layout right */
+.graphic iframe { display:block; }
+
+/* Pagelet photo grids should be generally be auto width (some 1.x designs hardcoded an exact width) */
+.pagelet .photogrid-index { width:auto; }
+
+/* For content like amazon which forces white background. Design SHOULD set color for A tag and text color. */
+.whiteBackground
+{
+	background-color:white;
+}
+
+.article-info
+{
+	margin-bottom:1em;
+}
+
+/* Firefox reduce dotted lines on links */
+.photo-navigation a:focus, .replaced a:focus {overflow:hidden;}
+
+/* Disqus correction to prevent overflow scroll bars in some designs */
+#dsq-content { overflow:hidden; }
+#dsq-content .dsq-auth-header { width: auto!important; }
+#dsq-content .dsq-by { margin: 4px 6px 0px 0px; }
+#dsq-content .dsq-by a, #dsq-content .dsq-by a:hover { border: 0px none; }
+#dsq-content h3 { margin:0px; }
+
+/* Site menus. Don't wrap the top level items, and wrap sub-menu items normaly. */
+#sitemenu-content ul li span.in { white-space:nowrap;}
+* html #sitemenu-content ul li span.in {white-space: normal}
+*:first-child+html #sitemenu-content ul li span.in {white-space: normal}
+#sitemenu-content ul ul li span.in {white-space: normal}
+#sitemenu-content span.in { position: relative; }
+
+body { word-wrap:break-word; }
+
+/* Make sure scaled-down images look good in IE */
+img { -ms-interpolation-mode: bicubic; }
+
+.HTMLElement { overflow:hidden; }
+
+/* ============================================ *
+   -- Carbone --
+   v4.0 (3910)
+   A Design for Sandvox created by BehindTheRabbit
+   http://www.behindtherabbit.com/
+   ============================================ */
+
+/* ====================
+   DEFAULT
+   --------------------
+*/
+img {border:none;}
+body.allow-sidebar #main img {max-width:100%; height:auto;}
+#googlemap img {max-width:none !important;}
+.ImageElement, .center.VideoElement { text-align:center;}
+
+dl, dd {font-size:1.2em;}
+sub, sup { font-size: 75%; line-height: 0; position: relative; vertical-align: baseline; }
+sup { top: -0.5em; }
+sub { bottom: -0.25em; }
+
+.clear {clear: both; height: 0;}
+.hidden {display:none !important;}
+.right {margin-left:20px;}
+.left {margin-right:20px;}
+
+code, pre { padding: 0 3px 2px; font-family: Menlo,Monaco,"Courier New",monospace; font-size: 12px; color: #333333; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; }
+code { padding: 3px 4px; color: #d14; background-color: #f7f7f9; border: 1px solid #e1e1e8; }
+pre { display: block; padding: 8.5px; margin: 0 0 9px; font-size: 12px; line-height: 18px; background-color: #f5f5f5; border: 1px solid #ccc; border: 1px solid rgba(0,0,0,0.15); -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; white-space: pre; white-space: pre-wrap; word-break: break-all; }
+pre code { padding: 0; background-color: transparent; }
+abbr {font-variant:small-caps;}
+cite {font-family:Georgia, Times, "Times New Roman", serif; font-style:italic; color:#999;}
+cite em {font-style:normal;}
+
+/* ====================
+   GENERAL
+   --------------------
+*/
+body {
+	margin:0; padding:0 0 30px 0;
+	background-color: #333;
+	color:#333;
+	font-family:"Lucida Grande", "Lucida Sans", "Lucida Sans Unicode", Arial, Helvetica, sans-serif;
+	font-size:62.5%;
+}
+
+/* ====================
+   LAYOUT & PAGE-TOP
+   --------------------
+*/
+#page-container {
+	width:900px; margin:0 auto;
+	background-color: #FFFFFF;
+	-moz-box-shadow:    0px 3px 4px 0px #000000;
+	-webkit-box-shadow: 0px 3px 4px 0px #000000;
+	box-shadow:         0px 3px 4px 0px #000000;
+}
+#title {
+	padding:0; margin:0;
+	overflow:hidden;
+	height:150px;
+}
+.has-custom-banner #title {background-position: 0 0; background-repeat:repeat-x;}
+
+h1, #title p {
+	font-family:"Century Gothic", "Avant Garde", Arial, Helvetica, sans-serif;
+	color: #FFF;
+	text-shadow:0 0 3px #FFF;
+}
+h1 {
+	font-size:3.4em;
+	font-weight:normal;
+	padding: 36px 26px 0 26px; margin:0; 
+}
+h1 a {color:#FFF; text-decoration:none;}
+#title p {
+	padding:0 26px 0 26px; margin:0;
+	font-size:1.5em;
+}
+#title img { float:right; margin:10px 10px 0 0; padding:0; }
+#page-bottom {font-size:1.1em; clear:both; text-align:center; margin:0; padding:40px 20px 20px 20px;}
+#page-bottom a:link, #page-bottom a:visited  {text-decoration:none;}
+
+/* floats */
+#sidebar-container {float:left; padding:30px 0 0 10px;}
+#sidebar-content {border-right:1px solid #DDD;}
+body.allow-sidebar #main {float:right; padding:40px 30px 0 0;}
+
+/* ====================
+   SITEMENU
+   --------------------
+*/
+#sitemenu-container {
+	height:50px; padding:0; margin:0; color:#999;
+	font-size:1.2em;
+	background-color: #0a0a0a;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#0a0a0a), to(#3f3f3f));
+	background-image: -webkit-linear-gradient(top, #0a0a0a, #3f3f3f);
+	background-image: -moz-linear-gradient(top, #0a0a0a, #3f3f3f);
+	background-image: -o-linear-gradient(top, #0a0a0a, #3f3f3f);
+	background-image: -ms-linear-gradient(top, #0a0a0a, #3f3f3f);
+	background-image: linear-gradient(top, #0a0a0a, #3f3f3f);
+	filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,StartColorStr='#0a0a0a', EndColorStr='#3f3f3f');
+}
+#sitemenu a {text-decoration:none !important;}
+#sitemenu ul, #sitemenu ul li, #sitemenu ul li a, #sitemenu ul li .in {line-height:50px; height:50px;}
+#sitemenu ul {text-shadow:1px 2px 1px #000; margin:0; padding:0 26px 0 26px;}
+#sitemenu ul li { display:block; float:left; margin:0; padding:0 16px 0 0; list-style-type:none;}
+#sitemenu a {display:block; cursor:pointer;}
+#sitemenu ul li ul {background-color:#333;}
+#sitemenu ul li ul li .in {padding:0 !important;}
+
+#sitemenu ul ul li, #sitemenu ul ul li a, #sitemenu ul ul li .in {line-height:35px; height:35px;}
+
+#sitemenu-content .hasSubmenu ul {
+	-webkit-box-shadow:2px 2px 3px #333;
+	-moz-box-shadow:2px 2px 3px #333;
+	box-shadow:2px 2px 3px #333;
+}
+#sitemenu-content .hasSubmenu ul li {
+	border-bottom:1px solid #666;
+	padding-left:10px;
+}
+#sitemenu-content .hasSubmenu ul li.last { border-bottom:none;}
+#sitemenu-content ul li ul li span.in {border-bottom:none;}
+
+#sitemenu-content ul .submenu-indicator {
+	background-image:url(images/chevron-down.png); margin-left:5px;
+}
+#sitemenu-content.ddsmoothmenu-v ul .submenu-indicator, #sitemenu-content ul ul .submenu-indicator {
+	background-image:url(images/chevron-right.png); top:10px;
+}
+
+/* ====================
+   MAIN CONTENT
+   --------------------
+*/
+#main {min-height:450px;}
+body.no-sidebar #main {padding:40px 80px;}
+body.allow-sidebar #main {width:550px;}
+
+#main-content {padding:0 0 20px 0;}
+#main-content h2 {font-size:3em; margin:0; padding:0 0 10px 0;}
+
+.article h2, .article h3 {font-size:2.4em; margin:0; padding:30px 0 10px 0; clear:both;}
+#main .article h2 a:link, #main .article h2 a:visited,
+#main .article h3 a:link, #main .article h3 a:visited {color:#333; text-decoration:none;}
+#main .article h2 a:hover, #main .article h2 a:active,
+#main .article h3 a:hover, #main .article h3 a:active {color:#333; text-decoration:underline;}
+.article {line-height:2.6em;}
+.article-thumbnail {float:left; margin:18px 10px 0 0;}
+#main p, #main ul {
+	font-size:1.2em;
+}
+.timestamp {color:#999; font-family: "Monaco", Courier, "Courier New", monospace; text-align:right; margin:10px 0 20px 0; padding:0; clear:both;}
+.timestamp a {text-decoration:none;}
+.continue-reading-link:before {content:"» ";}
+.continue-reading-link a {text-decoration:none;}
+
+/* ====================
+   PAGELETS 
+   --------------------
+*/
+.callout-container {width:250px; float:right; padding:0 0 0 20px;}
+.pagelet  {word-wrap:break-word; overflow:hidden; margin:0 0 20px 0;}
+.pagelet ul {margin:0; padding:0 0 0 20px; }
+.pagelet li {margin:0; padding:0;}
+h4.pagelet-title {text-align:center; font-size:1.5em; margin-top:0;}
+
+.bordered {border:1px solid #CCC; padding:10px; -webkit-box-shadow: 0 2px 2px #CCC; -moz-box-shadow: 0 2px 2px #CCC; box-shadow: 0 2px 2px #CCC;}
+
+/* ====================
+   SIDEBAR
+   --------------------
+*/
+#sidebar-container {width:274px; margin:0 0 10px 0; line-height:1.8em;}
+#sidebar .pagelet {width:240px; padding:10px;}
+#sidebar p, #sidebar ul {
+	font-size:1.2em;
+	line-height:1.8em;
+}
+
+/* ====================
+   GRID
+   --------------------
+*/
+body.no-sidebar .gridItem {
+	margin:0 7px 7px 0;
+}
+body.allow-sidebar .gridItem {
+	margin:0 4px 4px 0;
+}
+.gridItem {
+	float:left; position:relative; width:176px; height:188px; overflow:hidden; text-align:center; padding: 4px 0;border:1px solid #CCC;
+	-webkit-border-radius:5px; -moz-border-radius:5px; border-radius:5px;
+	-webkit-box-shadow:0 1px 1px #999; -moz-box-shadow:0 1px 1px #CCC; box-shadow:0 1px 1px #999;
+	-webkit-transition: none; -moz-transition: none; transition: none;
+}
+.gridItem a {text-decoration:none;}
+.gridItem h3 {font-size:1.1em; line-height:1.8em; font-weight:normal; padding: 0 4px; text-align:center; position:absolute; top:140px; width:168px;}
+.gridItem img {margin: auto!important; display:block; position: absolute; top: 0; bottom: 48px; right: 0; left: 0;}
+.gridItem:hover {
+	-webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; transition: all 0.3s ease;
+	-webkit-box-shadow: 0px 0px 6px rgba(180,180,180,0.8); -moz-box-shadow: 0px 0px 6px rgba(180,180,180,0.8); box-shadow: 0px 0px 6px rgba(180,180,180,0.8);
+}
+#sidebar .gridItem {
+	float:none;
+	margin:8px auto;
+}
+
+/* ====================
+   NAVIGATION
+   --------------------
+*/
+.collection-navigation {clear:both;}
+/* 
+   Photo navigation
+   --------------------
+*/
+.photo-navigation {
+	height:26px;
+	width:169px;
+	margin:0 auto 20px auto;
+}
+.photo-navigation .previous-page a,
+.photo-navigation .next-page a,
+.photo-navigation .collection-index a {
+	opacity:0.4;
+	display:block;
+	height:26px;
+	text-indent:-9999px;
+	overflow:hidden;
+}
+.photo-navigation .collection-index {
+	margin-left:17px;
+}
+.photo-navigation .previous-page a:hover,
+.photo-navigation .next-page a:hover,
+.photo-navigation .collection-index a:hover {
+	opacity:1;
+	-webkit-transition:all 0.2s ease;
+		-moz-transition:all 0.2s ease;
+		-ms-transition:all 0.2s ease;
+		transition:all 0.2s ease;
+}
+.photo-navigation .previous-page a {background:url(images/arrows.png) 0 0 no-repeat #FFF;}
+.photo-navigation .next-page a {background:url(images/arrows.png) -124px 0 no-repeat #FFF;}
+.photo-navigation .collection-index a {background:url(images/arrows.png) -62px 0 no-repeat #FFF;}
+.photo-navigation .previous-page {width:45px; float:left;}
+.photo-navigation .next-page {width:45px; float:right;}
+.photo-navigation .collection-index {width:45px; float:left;}
+/* 
+   Text navigation
+   --------------------
+*/
+.text-navigation {font-size:1.1em; padding:10px 0 20px 0;}
+.text-navigation .previous-page, .text-navigation .next-page, .text-navigation .collection-index {display:block; text-align:right; border-right:4px solid #DDD; padding:2px 5px 2px 2px; margin-bottom:1px;}
+.text-navigation a:link, .text-navigation a:visited { text-decoration:none;}
+.text-navigation a:hover, .text-navigation a:active { text-decoration:underline;}
+
+/* ====================
+   SITE MAP
+   --------------------
+*/
+.wide .sitemap a {text-decoration:none; display:block;}
+.wide .sitemap .figure-content {padding:5px 10px; margin:0;	border:1px solid #CCC; -webkit-border-radius:5px; -moz-border-radius:5px; border-radius:5px; -webkit-transition:all 0.3s ease; -moz-transition:all 0.3s ease;	transition:all 0.3s ease;}
+.wide .sitemap .figure-content:hover {-webkit-box-shadow:3px 3px 3px #CCC; -moz-box-shadow:3px 3px 3px #CCC; box-shadow:3px 3px 3px #CCC;}
+.wide .sitemap .figure-content p {margin:5px 0;}
+.wide .sitemap ul {border:1px solid #FFF; padding:5px 10px; margin:0; list-style-type:none; -webkit-transition:all 0.3s ease; -moz-transition:all 0.3s ease; transition:all 0.3s ease; -webkit-border-radius:5px; -moz-border-radius:5px; border-radius:5px;}
+.wide .sitemap ul:hover {border:1px solid #CCC; -webkit-box-shadow:3px 3px 3px #CCC; -moz-box-shadow:3px 3px 3px #CCC; box-shadow:3px 3px 3px #CCC;}
+
+/* ====================
+   FORMS
+   --------------------
+*/
+input[type=text], input[type=email], textarea {border-top:1px solid #DDD; border-left:1px solid #DDD; border-bottom:1px solid #E9E9E9; border-right:1px solid #E9E9E9; background-color:#F7F7F7; font-size:120%; padding:5px; -webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px;}
+
+/* ====================
+   BLOCKQUOTES 
+   --------------------
+*/
+blockquote {
+	background-color:#DDD;
+	color:#454545;
+	padding:10px 30px;
+	margin:0;
+	-webkit-border-radius:10px;
+	   -moz-border-radius:10px;
+	        border-radius:10px;
+}
+
+/* ====================
+   FIXES
+   --------------------
+*/
+#main ul ul, #sidebar ul ul {font-size:1em;}
+*+html ul .submenu-indicator {width:25px !important;}
+/* Widgets
+   .................... */
+.flickr_badge_image {width:100px;}
+/* Comments
+   .................... */
+.timestamp+div {margin-top:20px;}
+
+/* ====================
+   READY-MADE CODE
+   --------------------
+*/
+/* right sidebar */
+.right-sidebar #sidebar-container {float:right; padding:30px 0 0 20px;}
+.right-sidebar #sidebar-content {border-left:1px solid #DDD;}
+body.allow-sidebar .right-sidebar #main {float:right; padding:40px 0 0 30px;}
+.right-sidebar #sidebar .pagelet {margin-left:10px;}
+
+/* header-right */
+.header-right #title {text-align:right;}
+
+/* no fluo header */
+.no-fluo-header h1, .no-fluo-header #title p {text-shadow:none;}
+
+/* serif-font */
+.serif-font #main, .serif-font #sidebar {font-family:Georgia,Times,"Times New Roman",serif;}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min--moz-device-pixel-ratio: 1.5), only screen and (min-resolution: 240dpi) {
+/* ============================================ *
+   -- Carbone --
+   Retina-ready CSS
+   ============================================ */
+
+#sitemenu-content ul .submenu-indicator {
+	background-image:url(images/chevron-down@2x.png);
+	background-size:13px 6px;
+}
+#sitemenu-content.ddsmoothmenu-v ul .submenu-indicator, #sitemenu-content ul ul .submenu-indicator {
+	background-image:url(images/chevron-right@2x.png);
+	background-size:6px 13px;
+}
+.photo-navigation .previous-page a,
+.photo-navigation .next-page a,
+.photo-navigation .collection-index a {
+	background-image:url(images/arrows.svg);
+	background-size:169px 26px;
+}
+}
+
+/* ====================
+   DARK BLUE VARIATION
+   --------------------
+*/
+
+/* colors */
+#title {
+	background-color: #336699;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#336699), to(#003366));
+	background-image: -webkit-linear-gradient(top, #336699, #003366);
+	background-image: -moz-linear-gradient(top, #336699, #003366);
+	background-image: -o-linear-gradient(top, #336699, #003366);
+	background-image: -ms-linear-gradient(top, #336699, #003366);
+	background-image: linear-gradient(top, #336699, #003366);
+	filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,StartColorStr='#336699', EndColorStr='#003366');
+}
+#sitemenu-content li a:link, #sitemenu-content li a:visited {color:#FFF;}
+#sitemenu-content li a:hover, #sitemenu-content li a:active {color:#7AADDF;}
+
+#sidebar a:link, #sidebar a:visited {color:#0C5ECE; text-decoration:none;}
+#sidebar a:hover, #sidebar a:active {color:#7AADDF; text-decoration:underline;}
+#main a:link, #main a:visited, #page-bottom a:link, #page-bottom a:visited {color:#0C5ECE;}
+#main a:hover, #main a:active, #page-bottom a:hover, #page-bottom a:active {color:#7AADDF; text-decoration:none;}
+
+/* form button */
+/* thanks to http://webdesignerwall.com/tutorials/css3-gradient-buttons for this nice styling */
+input[type=submit] {
+	min-width:25% !important; border: solid 1px #0076a3;
+	-webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px;
+	background-color: #0095cd; padding:6px; font-size:100%; font-weight:bold; color:#FFF; cursor:pointer; outline: none; text-shadow: 0 1px 1px rgba(0,0,0,.3);
+	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2); -moz-box-shadow: 0 1px 2px rgba(0,0,0,.2); box-shadow: 0 1px 2px rgba(0,0,0,.2);
+	background: -webkit-gradient(linear, left top, left bottom, from(#00adee), to(#0078a5));
+	background: -moz-linear-gradient(top,  #00adee,  #0078a5);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00adee', endColorstr='#0078a5'); min-width:25% !important;
+}
+input[type=submit]:hover {
+	background-color: #007ead;
+	background: -webkit-gradient(linear, left top, left bottom, from(#0095cc), to(#00678e));
+	background: -moz-linear-gradient(top,  #0095cc,  #00678e);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#0095cc', endColorstr='#00678e');
+}
+input[type=submit]:active {
+	position: relative; top: 1px; color: #80bed6;
+	background: -webkit-gradient(linear, left top, left bottom, from(#0078a5), to(#00adee));
+	background: -moz-linear-gradient(top,  #0078a5,  #00adee);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#0078a5', endColorstr='#00adee');
+}
+
+.callout-container, .graphic-container { clear:right; }
+
