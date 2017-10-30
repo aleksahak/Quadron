@@ -14,9 +14,9 @@ The Quadron methodology, developed via gradient boosting machines trained on the
 
 ## Installation
 
-**1.** Install the latest version of R programming language or skip to the next step. Step-wise instructions on R installation and upgrade can be found through the following links: [1](http://alexonscience.blogspot.co.uk/2015/10/installing-r-on-linuxunix-machines-from.html), [2](http://alexonscience.blogspot.co.uk/2015/10/upgrade-r-environmentlibraries-mac-osx.html).
+**1.** Install the latest version of R programming language or skip to the next step. Step-wise instructions on R installation and upgrade for Linux and MacOSX can be found through the following links: [1](http://alexonscience.blogspot.co.uk/2015/10/installing-r-on-linuxunix-machines-from.html), [2](http://alexonscience.blogspot.co.uk/2015/10/upgrade-r-environmentlibraries-mac-osx.html).
 
-**2.** Launch R from the command line and install the following R packages, including *shiny* (required for the graphical user interface), *doMC*, *foreach* and *itertools* (required for a parallel execution of the program) from within R.
+**2.** Launch R from the command line and install the following R packages from within R, including *shiny* (required for the graphical user interface), *doMC*, *foreach* and *itertools* (required for a parallel execution of the program).
 
 ```{bash, tidy=TRUE, echo=TRUE, eval=FALSE}
 $ R
@@ -43,7 +43,7 @@ The downloaded folder has the following content:
 - **QuadronGUI/** - the subfolder containing the graphical user interface, 
 - **Quadron.R** - the interfacing R script used to execute Quadron from command line.
 
-**4.** Install the specific, 0.4-4, version of *xgboost* R library. This specific version is required since there has been a compatibility breach in mapping the model tree structures in subsequent versions. The easiest way to install this version for R on Linux operating system, with all the necessary compilers available, is through the source code distributed through the native R CRAN archive. To do so, launch R and type the following command:
+**4.** Install the specific, 0.4-4, version of *xgboost* R library. This specific version is required since there has been a compatibility breach in mapping the model tree structures in subsequent versions of *xgboost*. The easiest way to install this version for R on Linux operating system, with all the necessary compilers available, is through the source code distributed through the native R CRAN archive. To do so, launch R and type the following command:
 
 ```{bash, tidy=TRUE, echo=TRUE, eval=FALSE}
 $ R
