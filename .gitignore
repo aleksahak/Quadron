@@ -1,7 +1,7 @@
 # a comment - this is ignored
 # no file with certain endings
 *~
-*.DS_Store
+.DS_Store
 # ignore these directories with all the files within
 exper/
 Quadron.lib

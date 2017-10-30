@@ -29,15 +29,9 @@ $ R
 > install.packages("doMC")
 > install.packages("foreach")
 > install.packages("itertools")
-
-# Install the sepcific 0.4-4 version of xgboost.
-> install.packages(
-    "http://cran.r-project.org/src/contrib/Archive/xgboost/xgboost_0.4-4.tar.gz",
-    repos=NULL,
-    type="source")
 ```
 
-**3.** Download the Quadron source code from the [GitHub](https://github.com/aleksahak/Quadron) repository. You can also do that via a Linux/Unix/OSX command line, given that git is installed, by typing the following:
+**3.** Download the Quadron source code from the [GitHub](http://github.com/aleksahak/Quadron) repository or its interfacing [home page](http://quadron.atgcdynamics.org). You can also do that via a Linux/Unix/OSX command line, given that git is installed, by typing the following:
 
 ```{bash, tidy=TRUE, echo=TRUE, eval=FALSE}
 $ git clone https://github.com/aleksahak/Quadron
@@ -49,7 +43,39 @@ The downloaded folder has the following content:
 - **QuadronGUI/** - the subfolder containing the graphical user interface, 
 - **Quadron.R** - the interfacing R script used to execute Quadron from command line.
 
-**4.** Finally, you need to bit compile the package by going into the **lib/** subfolder and executing **bitcompile.R** code from within R.
+**4.** Install the specific, 0.4-4, version of *xgboost* R library. This specific version is required since there has been a compatibility breach in mapping the model tree structures in subsequent versions. The easiest way to install this version for R on Linux operating system, with all the necessary compilers available, is through the source code distributed through the native R CRAN archive. To do so, launch R and type the following command:
+
+```{bash, tidy=TRUE, echo=TRUE, eval=FALSE}
+$ R
+```
+```{r, tidy=TRUE, echo=TRUE, eval=FALSE}
+# For Linux:
+> install.packages(
+    "http://cran.r-project.org/src/contrib/Archive/xgboost/xgboost_0.4-4.tar.gz",
+    repos=NULL,
+    type="source")
+```
+
+Theoretically, the above command should work with MacOSX as well, however, some versions of the clang compiler in MacOSX do not support the fopenmp compiler keyword, hence installation from binaries is a safer routh. The pre-compiled binaries of *xgboost_0.4-4* are distributed with Quadron (also accessible from Revolution Analytics MRAN repository). They are located in the **lib/xgboost_0.4_4** subdirectory. For the installation, execute the following commands for MacOSX and Windows operating systems respectively (from command prompt, while located in the **lib/xgboost_0.4_4** subdirectory of the downloaded Quadron folder):
+
+```{bash, tidy=TRUE, echo=TRUE, eval=FALSE}
+# For MacOSX:
+$ cd lib/xgboost_0.4_4
+$ R CMD INSTALL macosx_bin/xgboost_0.4-4.tgz
+
+# For Windows, first launch R:
+$ R
+```
+
+```{r, tidy=TRUE, echo=TRUE, eval=FALSE}
+# Next, from within R (for Windows):
+> install.packages(
+    "windows_bin/xgboost_0.4-4.zip",
+    repos=NULL,
+    type="binary")
+```
+
+**5.** Finally, you need to bit compile the Quadron package by going into the **lib/** subfolder and executing **bitcompile.R** code from within R.
 
 ```{bash, tidy=TRUE, echo=TRUE, eval=FALSE}
 $ cd lib/
