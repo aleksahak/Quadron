@@ -260,6 +260,7 @@ NonCanonical = FALSE
 
   } else { # no PQS is found
     PRED <- NA
+    QP   <- NULL
     QP$start.pos     <- NA
     QP$seq.length    <- NA
     QP$strand        <- NA
